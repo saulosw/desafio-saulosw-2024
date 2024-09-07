@@ -45,7 +45,6 @@ class RecintosZoo {
         return { espacoOcupadoNoRecinto, especieCarnivoraDiferente, existeOutraEspecie };
     }
     
-
     biomaEhCompativel(animal, recinto) {
         const infoAnimal = this.animais[animal];
         return infoAnimal.bioma.some(bioma => recinto.bioma.includes(bioma));
