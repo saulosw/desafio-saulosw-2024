@@ -1,14 +1,13 @@
 class RecintosZoo {
-
     constructor() {
         this.animais = {
-            LEAO: { tamanho: 3, bioma: ['savana'] },
-            LEOPARDO: { tamanho: 2, bioma: ['savana'] },
-            CROCODILO: { tamanho: 3, bioma: ['rio'] },
-            MACACO: { tamanho: 1, bioma: ['savana', 'floresta'] },
-            GAZELA: { tamanho: 2, bioma: ['savana'] },
-            HIPOPOTAMO: { tamanho: 4, bioma: ['savana', 'rio'] }
-        }
+            LEAO: { tamanho: 3, bioma: ['savana'], carnivoro: true },
+            LEOPARDO: { tamanho: 2, bioma: ['savana'], carnivoro: true },
+            CROCODILO: { tamanho: 3, bioma: ['rio'], carnivoro: true },
+            MACACO: { tamanho: 1, bioma: ['savana', 'floresta'], carnivoro: false },
+            GAZELA: { tamanho: 2, bioma: ['savana'], carnivoro: false },
+            HIPOPOTAMO: { tamanho: 4, bioma: ['savana', 'rio'], carnivoro: false }
+        };
 
         this.recintos = [
             { numero: 1, bioma: ['savana'], tamanhoTotal: 10, animaisExistentes: [{ especie: 'MACACO', quantidade: 3 }] },
@@ -16,62 +15,79 @@ class RecintosZoo {
             { numero: 3, bioma: ['savana', 'rio'], tamanhoTotal: 7, animaisExistentes: [{ especie: 'GAZELA', quantidade: 1 }] },
             { numero: 4, bioma: ['rio'], tamanhoTotal: 8, animaisExistentes: [] },
             { numero: 5, bioma: ['savana'], tamanhoTotal: 9, animaisExistentes: [{ especie: 'LEAO', quantidade: 1 }] }
-        ]
+        ];
     }
- 
-    analisaRecintos(animal, quantidade) {
-        if (!this.animais[animal]) return { erro: "Animal inválido", recintosViaveis: false }
-        if (quantidade <= 0) return { erro: "Quantidade inválida", recintosViaveis: false }
 
-        const infoAnimal = this.animais[animal]
-        const recintosViaveis = []
+    validaAnimalEQuantidade(animal, quantidade) {
+        if (!this.animais[animal]) return { erro: "Animal inválido", recintosViaveis: false };
+        if (quantidade <= 0) return { erro: "Quantidade inválida", recintosViaveis: false };
+        return { erro: null };
+    }
+
+    calculaEspacoEVerificaCarnivoros(recinto, animal) {
+        let espacoOcupadoNoRecinto = 0;
+        let especieCarnivoraDiferente = false;
+        let existeOutraEspecie = false;
+    
+        for (const animalNoRecinto of recinto.animaisExistentes) {
+            const infoAnimalNoRecinto = this.animais[animalNoRecinto.especie];
+            espacoOcupadoNoRecinto += animalNoRecinto.quantidade * infoAnimalNoRecinto.tamanho;
+    
+            if (infoAnimalNoRecinto.carnivoro && animalNoRecinto.especie !== animal) {
+                especieCarnivoraDiferente = true;
+            }
+    
+            if (animalNoRecinto.especie !== animal) {
+                existeOutraEspecie = true;
+            }
+        }
+    
+        return { espacoOcupadoNoRecinto, especieCarnivoraDiferente, existeOutraEspecie };
+    }
+    
+
+    biomaEhCompativel(animal, recinto) {
+        const infoAnimal = this.animais[animal];
+        return infoAnimal.bioma.some(bioma => recinto.bioma.includes(bioma));
+    }
+
+    analisaRecintos(animal, quantidade) {
+        const validacao = this.validaAnimalEQuantidade(animal, quantidade);
+        if (validacao.erro) return validacao;
+
+        const infoAnimal = this.animais[animal];
+        const recintosViaveis = [];
 
         for (const recinto of this.recintos) {
-            let espacoOcupadoNoRecinto = 0
-            let temAnimaisCarnivoros = false
-            let existeOutraEspecie = false
+            const { espacoOcupadoNoRecinto, especieCarnivoraDiferente, existeOutraEspecie } = this.calculaEspacoEVerificaCarnivoros(recinto, animal);
 
-            for (const animalNoRecinto of recinto.animaisExistentes) {
-                const infoAnimalNoRecinto = this.animais[animalNoRecinto.especie]
-                espacoOcupadoNoRecinto += animalNoRecinto.quantidade * infoAnimalNoRecinto.tamanho
-
-                if (['LEAO', 'LEOPARDO'].includes(animalNoRecinto.especie)) {
-                    temAnimaisCarnivoros = true
-                }
-
-                if (animalNoRecinto.especie !== animal) {
-                    existeOutraEspecie = true
-                }
-            }
-
-            const espacoDisponivelNoRecinto = recinto.tamanhoTotal - espacoOcupadoNoRecinto
-            let espacoNecessarioParaAnimal = quantidade * infoAnimal.tamanho
+            const espacoDisponivelNoRecinto = recinto.tamanhoTotal - espacoOcupadoNoRecinto;
+            let espacoNecessarioParaAnimal = quantidade * infoAnimal.tamanho;
 
             if (existeOutraEspecie) {
-                espacoNecessarioParaAnimal += 1
+                espacoNecessarioParaAnimal += 1;
             }
 
-            const biomaEhCompativel = () => {
-                if (infoAnimal.bioma.length === 1 && recinto.bioma.length === 1) {
-                    return infoAnimal.bioma[0] === recinto.bioma[0]
-                } else if (infoAnimal.bioma.length > 1) {
-                    return infoAnimal.bioma.some(bioma => recinto.bioma.includes(bioma))
+            if (especieCarnivoraDiferente || (infoAnimal.carnivoro && existeOutraEspecie)) continue;
+
+            if (animal === 'HIPOPOTAMO') {
+                if (existeOutraEspecie && !(recinto.bioma.includes('savana') && recinto.bioma.includes('rio'))) {
+                    continue;
                 }
-                return false
             }
 
-            if (biomaEhCompativel() && espacoDisponivelNoRecinto >= espacoNecessarioParaAnimal && !temAnimaisCarnivoros) {
-                const espacoRestante = espacoDisponivelNoRecinto - espacoNecessarioParaAnimal
-                recintosViaveis.push(`Recinto ${recinto.numero} (espaço livre: ${espacoRestante} total: ${recinto.tamanhoTotal})`)
+            if (this.biomaEhCompativel(animal, recinto) && espacoDisponivelNoRecinto >= espacoNecessarioParaAnimal) {
+                const espacoRestante = espacoDisponivelNoRecinto - espacoNecessarioParaAnimal;
+                recintosViaveis.push(`Recinto ${recinto.numero} (espaço livre: ${espacoRestante} total: ${recinto.tamanhoTotal})`);
             }
         }
 
         if (recintosViaveis.length === 0) {
-            return { erro: "Não há recinto viável", recintosViaveis: false }
+            return { erro: "Não há recinto viável", recintosViaveis: false };
         }
 
-        return { recintosViaveis }
+        return { recintosViaveis };
     }
 }
 
-export { RecintosZoo as RecintosZoo }
+export { RecintosZoo as RecintosZoo };
