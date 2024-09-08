@@ -113,5 +113,5 @@ describe('Recintos do Zoologico', () => {
         const resultado = new RecintosZoo().analisaRecintos('LEOPARDO', 1);
         expect(resultado.erro).toBe("Não há recinto viável");
         expect(resultado.recintosViaveis).toBeFalsy();
-    });    
+    });
 });
