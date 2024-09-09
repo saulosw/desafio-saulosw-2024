@@ -79,6 +79,8 @@ class RecintosZoo {
                 continue;
             }
 
+            if(animal === 'MACACO' && recinto.animaisExistentes.length === 0 && quantidade === 1) continue;
+
             if (this.biomaEhCompativel(animal, recinto) && espacoDisponivelNoRecinto >= espacoNecessarioParaAnimal) {
                 const espacoRestante = espacoDisponivelNoRecinto - espacoNecessarioParaAnimal;
                 recintosViaveis.push(`Recinto ${recinto.numero} (espaço livre: ${espacoRestante} total: ${recinto.tamanhoTotal})`);
