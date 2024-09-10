@@ -1,5 +1,5 @@
 import Animal from "./animal";
-import { Especies, Biomas } from "../enums/constantes";
+import { Especies, Biomas } from "../enums/definicoes";
 
 class Leao extends Animal {
     constructor() {

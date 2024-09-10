@@ -1,4 +1,4 @@
-import { Erros } from "../enums/constantes";
+import { Erros } from "../enums/definicoes";
 
 export default class Validador {
     static validaAnimalEQuantidade(animais, animal, quantidade) {

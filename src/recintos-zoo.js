@@ -1,5 +1,5 @@
 import { Leao, Leopardo, Crocodilo, Macaco, Gazela, Hipopotamo } from "./entidades/especies";
-import { Especies, Biomas, Erros } from "./enums/constantes";
+import { Especies, Biomas, Erros } from "./enums/definicoes";
 import Validador from "./entidades/validador";
 import Recinto from "./entidades/recinto";
 
