@@ -25,12 +25,9 @@ export default class Recinto {
 
         for (const animalNoRecinto of this.animaisExistentes) {
             const infoAnimal = animais[animalNoRecinto.especie];
-            if (infoAnimal.carnivoro && animalNoRecinto.especie !== especie) {
-                especieCarnivoraDiferente = true;
-            }
-            if (animalNoRecinto.especie !== especie) {
-                existeOutraEspecie = true;
-            }
+            
+            if (infoAnimal.carnivoro && animalNoRecinto.especie !== especie) especieCarnivoraDiferente = true;
+            if (animalNoRecinto.especie !== especie) existeOutraEspecie = true;
         }
 
         return { especieCarnivoraDiferente, existeOutraEspecie };
@@ -55,13 +52,8 @@ export default class Recinto {
         const espacoDisponivelNoRecinto = this.tamanhoTotal - espacoOcupadoNoRecinto;
         let espacoNecessarioParaAnimal = this.calcularEspacoNecessario(animal, quantidade, existeOutraEspecie);
 
-        if (this.existeCarnivoroIncompativel(animal, especieCarnivoraDiferente, existeOutraEspecie)) {
-            return { viavel: false };
-        }
-
-        if (this.regraEspecificaInvalida(animal, existeOutraEspecie, quantidade)) {
-            return { viavel: false };
-        }
+        if (this.existeCarnivoroIncompativel(animal, especieCarnivoraDiferente, existeOutraEspecie)) return { viavel: false };
+        if (this.regraEspecificaInvalida(animal, existeOutraEspecie, quantidade)) return { viavel: false };
 
         if (this.temEspacoDisponivel(animal, espacoDisponivelNoRecinto, espacoNecessarioParaAnimal)) {
             const espacoRestante = espacoDisponivelNoRecinto - espacoNecessarioParaAnimal;
