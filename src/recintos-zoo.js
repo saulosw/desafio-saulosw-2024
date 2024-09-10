@@ -1,7 +1,7 @@
-import { Leao, Leopardo, Crocodilo, Macaco, Gazela, Hipopotamo } from "./animais-especificos";
-import { Especies, Biomas, Erros } from "./constantes";
-import ValidadorInputs from "./validador-inputs";
-import Recinto from "./recinto";
+import { Leao, Leopardo, Crocodilo, Macaco, Gazela, Hipopotamo } from "./entidades/especies";
+import { Especies, Biomas, Erros } from "./enum-const/constantes";
+import Validador from "./entidades/validador";
+import Recinto from "./entidades/recinto";
 
 class RecintosZoo {
     constructor() {
@@ -24,7 +24,7 @@ class RecintosZoo {
     }
 
     analisaRecintos(animal, quantidade) {
-        const validacao = ValidadorInputs.validarAnimalEQuantidade(this.animais, animal, quantidade);
+        const validacao = Validador.validaAnimalEQuantidade(this.animais, animal, quantidade);
         if (validacao.erro) return validacao;
 
         const infoAnimal = this.animais[animal];
