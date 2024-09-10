@@ -48,7 +48,6 @@ export default class Recinto {
         return animal.ehCompativelComBioma(this.bioma) && espacoDisponivelNoRecinto >= espacoNecessarioParaAnimal;
     }
 
-
     verificarCompatibilidade(animal, quantidade, animais) {
         const espacoOcupadoNoRecinto = this.calcularEspacoOcupado(animais);
         const { especieCarnivoraDiferente, existeOutraEspecie } = this.verificarCarnivoros(animais, animal.nome);
