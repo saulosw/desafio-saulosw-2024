@@ -8,7 +8,54 @@ Para baixar a estrutura no formato zip, basta clicar neste [link](https://dev.az
 
 ### ENTREGANDO O DESAFIO
 Após resolver o desafio e validá-lo com os testes (mais detalhes nos tópicos abaixo), você terá que criar um repositório **público** no [Github](https://github.com/) com o **nome** de `desafio-seuUsername-2024` (substitua "seuUsername" pelo seu usuário do GitHub) e colocar o código na **branch** `main`.
+import Animal from "./animal";
+import { Especies, Biomas } from "../enums/definicoes";
 
+class Leao extends Animal {
+    constructor() {
+        super(Especies.LEAO, 3, [Biomas.SAVANA], true);
+    }
+}
+
+class Leopardo extends Animal {
+    constructor() {
+        super(Especies.LEOPARDO, 2, [Biomas.SAVANA], true);
+    }
+}
+
+class Crocodilo extends Animal {
+    constructor() {
+        super(Especies.CROCODILO, 3, [Biomas.RIO], true);
+    }
+}
+
+class Macaco extends Animal {
+    constructor() {
+        super(Especies.MACACO, 1, [Biomas.SAVANA, Biomas.FLORESTA], false);
+    }
+
+    incompatibilidadeComRecinto(recinto, existeOutraEspecie, quantidade) {
+        return recinto.animaisExistentes.length === 0 && quantidade === 1;
+    }
+}
+
+class Gazela extends Animal {
+    constructor() {
+        super(Especies.GAZELA, 2, [Biomas.SAVANA], false);
+    }
+}
+
+class Hipopotamo extends Animal {
+    constructor() {
+        super(Especies.HIPOPOTAMO, 4, [Biomas.SAVANA, Biomas.RIO], false);
+    }
+
+    incompatibilidadeComRecinto(recinto, existeOutraEspecie, quantidade) {
+        return existeOutraEspecie && !recinto.bioma.includes(Biomas.SAVANA) || !recinto.bioma.includes(Biomas.RIO);
+    }
+}
+
+export { Leao, Leopardo, Crocodilo, Macaco, Gazela, Hipopotamo };
 Se você ainda não teve contato com essa ferramenta, não tem problema. Separamos um material para lhe ajudar nessa etapa: [Como usar Git e Github na prática](https://www.youtube.com/watch?v=UBAX-13g8OM).
 
 ## O DESAFIO
