@@ -16,7 +16,9 @@ Este repositório contém a solução para o desafio de organização dos recint
 Os testes padrões permaneceram e novos foram implementados na pasta `my-tests`. Eles cobrem uma variedade de cenários, incluindo:
 
 - **Testes de Entrada Inválida**: Verifica se a aplicação lida corretamente com entradas inválidas, como tipos de dados errados ou valores incorretos.
-- **Testes Específicos por Animal**: Avalia a capacidade da aplicação em encontrar recintos apropriados para diferentes tipos de animais, como Leões, Leopardo, Crocodilo, Macaco, Gazela e Hipopótamo.
+- **Testes Específicos por Animal**: Avalia a capacidade da aplicação em encontrar recintos apropriados para diferentes tipos de animais.
+- **Testes Especificos por Recinto**: Testa a funcionalidade dos recintos, garantindo que a alocação de animais esteja de acordo com as restrições e critérios definidos para cada tipo de recinto.
+- **Testes Gerais**: Avalia a integração geral e o comportamento do sistema como um todo, garantindo que todas as partes funcionem de forma coesa e eficiente.
 
 ## Instalação
 
