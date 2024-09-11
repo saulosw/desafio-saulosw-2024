@@ -38,9 +38,8 @@ class RecintosZoo {
             }
         }
 
-        if (recintosViaveis.length === 0) {
-            return { erro: Erros.ErroRecinto, recintosViaveis: false };
-        }
+        if (recintosViaveis.length === 0) return { erro: Erros.ErroRecinto, recintosViaveis: false };
+        
         return { recintosViaveis };
     }
 }
