@@ -10,7 +10,7 @@ export default class Animal {
         return this.biomas.some(bioma => biomasRecinto.includes(bioma));
     }
 
-    ehRegraInvalida(recinto, existeOutraEspecie, quantidade) {
+    incompatibilidadeComRecinto(recinto, existeOutraEspecie, quantidade) {
         return false;
     }
 }

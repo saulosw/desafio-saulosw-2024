@@ -24,7 +24,7 @@ class Macaco extends Animal {
         super(Especies.MACACO, 1, [Biomas.SAVANA, Biomas.FLORESTA], false);
     }
 
-    ehRegraInvalida(recinto, existeOutraEspecie, quantidade) {
+    incompatibilidadeComRecinto(recinto, existeOutraEspecie, quantidade) {
         return recinto.animaisExistentes.length === 0 && quantidade === 1;
     }
 }
@@ -40,7 +40,7 @@ class Hipopotamo extends Animal {
         super(Especies.HIPOPOTAMO, 4, [Biomas.SAVANA, Biomas.RIO], false);
     }
 
-    ehRegraInvalida(recinto, existeOutraEspecie, quantidade) {
+    incompatibilidadeComRecinto(recinto, existeOutraEspecie, quantidade) {
         return existeOutraEspecie && !recinto.bioma.includes(Biomas.SAVANA) || !recinto.bioma.includes(Biomas.RIO);
     }
 }

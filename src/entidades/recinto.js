@@ -6,6 +6,37 @@ export default class Recinto {
         this.animaisExistentes = animaisExistentes;
     }
 
+    //public method
+
+    verificarCompatibilidade(animal, quantidade, animais) {
+        const espacoOcupadoNoRecinto = this.calcularEspacoOcupado(animais);
+        const { especieCarnivoraDiferente, existeOutraEspecie } = this.verificarCarnivoros(animais, animal.nome);
+
+        const espacoDisponivelNoRecinto = this.tamanhoTotal - espacoOcupadoNoRecinto;
+        let espacoNecessarioParaAnimal = this.calcularEspacoNecessario(animal, quantidade, existeOutraEspecie);
+
+        if (
+            this.existeCarnivoroIncompativel(animal, especieCarnivoraDiferente, existeOutraEspecie) ||
+            animal.incompatibilidadeComRecinto(this, existeOutraEspecie, quantidade) ||
+            !this.temEspacoDisponivel(animal, espacoDisponivelNoRecinto, espacoNecessarioParaAnimal)
+        ) {
+            return { viavel: false };
+        }
+        
+            const espacoRestante = espacoDisponivelNoRecinto - espacoNecessarioParaAnimal;
+            return { viavel: true, espacoRestante };
+    }
+
+    //private method
+
+    existeCarnivoroIncompativel(animal, especieCarnivoraDiferente, existeOutraEspecie) {
+        return especieCarnivoraDiferente || (animal.carnivoro && existeOutraEspecie);
+    }
+
+    temEspacoDisponivel(animal, espacoDisponivelNoRecinto, espacoNecessarioParaAnimal) {
+        return animal.ehCompativelComBioma(this.bioma) && espacoDisponivelNoRecinto >= espacoNecessarioParaAnimal;
+    }
+
     calcularEspacoOcupado(animais) {
         return this.animaisExistentes.reduce((espaco, animalNoRecinto) => {
             const infoAnimal = animais[animalNoRecinto.especie];
@@ -32,35 +63,4 @@ export default class Recinto {
 
         return { especieCarnivoraDiferente, existeOutraEspecie };
     }
-
-    existeCarnivoroIncompativel(animal, especieCarnivoraDiferente, existeOutraEspecie) {
-        return especieCarnivoraDiferente || (animal.carnivoro && existeOutraEspecie);
-    }
-
-    regraEspecificaInvalida(animal, existeOutraEspecie, quantidade) {
-        return animal.ehRegraInvalida(this, existeOutraEspecie, quantidade);
-    }
-
-    temEspacoDisponivel(animal, espacoDisponivelNoRecinto, espacoNecessarioParaAnimal) {
-        return animal.ehCompativelComBioma(this.bioma) && espacoDisponivelNoRecinto >= espacoNecessarioParaAnimal;
-    }
-
-    verificarCompatibilidade(animal, quantidade, animais) {
-        const espacoOcupadoNoRecinto = this.calcularEspacoOcupado(animais);
-        const { especieCarnivoraDiferente, existeOutraEspecie } = this.verificarCarnivoros(animais, animal.nome);
-
-        const espacoDisponivelNoRecinto = this.tamanhoTotal - espacoOcupadoNoRecinto;
-        let espacoNecessarioParaAnimal = this.calcularEspacoNecessario(animal, quantidade, existeOutraEspecie);
-
-        if (this.existeCarnivoroIncompativel(animal, especieCarnivoraDiferente, existeOutraEspecie)) return { viavel: false };
-        if (this.regraEspecificaInvalida(animal, existeOutraEspecie, quantidade)) return { viavel: false };
-
-        if (this.temEspacoDisponivel(animal, espacoDisponivelNoRecinto, espacoNecessarioParaAnimal)) {
-            const espacoRestante = espacoDisponivelNoRecinto - espacoNecessarioParaAnimal;
-            return { viavel: true, espacoRestante };
-        }
-
-        return { viavel: false };
-    }
-
 }
